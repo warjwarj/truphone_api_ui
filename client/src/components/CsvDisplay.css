@@ -1,0 +1,17 @@
+.csv-table {
+  border-collapse: collapse;
+  width: 100%;
+  table-layout: fixed; /* Ensures equal width distribution */
+}
+
+.csv-table td, .csv-table th {
+  border: 1px solid #ccc;
+  padding: 8px;
+  text-align: left;
+  word-wrap: break-word; /* Ensures long text wraps instead of overflowing */
+}
+
+/* Optionally, set a specific width if you want fixed column sizes */
+/* .csv-table td {
+  width: 150px;
+} */
