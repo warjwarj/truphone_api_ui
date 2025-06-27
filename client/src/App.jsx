@@ -54,7 +54,7 @@ export default function App() {
       <ul>
         <li>Make sure that your csv column headings conform to the below:</li>
         <strong>Label,ICCID,Rate,End User,Device Id,Tags,Job Num</strong><aside>seperate multiple tags with a comma.</aside>
-        <li></li>
+        <li>If the API rejects your request and you're not sure why, it's likely due to incorrect ICCIDs in the CSV. Remember this is set up for the tracker Truphone API</li>
       </ul>
       <h2>CSV File Input:</h2>
       <CsvDisplay tableData={fileContent}/>
