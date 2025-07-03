@@ -52,14 +52,14 @@ export default function App() {
       <button onClick={handleApiRequest}>Send Api Request</button>
       <h2>Notes:</h2>
       <ul>
-        <li>Make sure that your csv column headings conform to the below:</li>
-        <strong>Label,ICCID,Rate,End User,Device Id,Tags,Job Num</strong><aside>seperate multiple tags with a comma.</aside>
-        <li></li>
+        <li>Example CSV Column Headings: <strong>Label,ICCID,Rate,End User,Device Id,Tags,Job Num</strong> - seperate multiple tags with a comma.</li>
+        <li>The label field and the tag field are handled differently, but the other attributes are flexible - as long as the attribute is on Truphone, just add a column for it and it will attempt to set it.</li>
+        <li>If you get an error like "This field must not be blank" check that every row has an ICCID value.</li>
       </ul>
-      <h2>CSV File Input:</h2>
-      <CsvDisplay tableData={fileContent}/>
       <h2>Api Response</h2>
       <ApiResDisplay apiRes={apiResponse}/>
+      <h2>CSV File Input:</h2>
+      <CsvDisplay tableData={fileContent}/>
     </div>
   );
 }

@@ -91,13 +91,13 @@ exports.makeApiCallToSetAttributes = function(attributes, attributes_to_ignore) 
             .flatMap(([value, iccids]) => {
                 att = att.trim().replace(/\s/g, "%20"); // replace whitespace with special char
                 const body = JSON.stringify({
-                    "simCards": iccids,
-                    "value": value
+                        "simCards": iccids,
+                        "value": value
                 })
                 const options = {
                     hostname: 'iot.truphone.com',
                     post: 443,
-                    path: `/api/v2.0/attributes/${att}`,
+                    path: `/api/v2.0/attributes/${att}/`,
                     method: 'PATCH',
                     headers: {
                         'Authorization': process.env.AUTH_TOKEN,
@@ -109,31 +109,6 @@ exports.makeApiCallToSetAttributes = function(attributes, attributes_to_ignore) 
             })
     });
 }
-
-// // this function sets the attribute to the given value 
-// exports.makeApiCallToSetAttributes = function(attribute, value, iccids) {
-//     // repalce whitespace in string with special char
-//     attribute = attribute.trim()
-//     attribute = attribute.replace(/\s/g, "%20");
-//     // payload body
-//     const body = JSON.stringify({
-//         "simCards": iccids,
-//         "value": value
-//     })
-//     // Set up the request options
-//     const options = {
-//         hostname: 'iot.truphone.com',
-//         post: 443,
-//         path: `/api/v2.0/attributes/${attribute}`,
-//         method: 'PATCH',
-//         headers: {
-//             'Authorization': process.env.AUTH_TOKEN,
-//             'Content-Type': 'application/json',
-//             'Content-Length': Buffer.byteLength(body)
-//         }
-//     };
-//     return sendApiRequest(options, body)
-// }
 
 // this function sets label of the SIM provided to the given value
 getAllTagsInUse = function() {
@@ -151,7 +126,7 @@ getAllTagsInUse = function() {
     return sendApiRequest(options, "")
 }
 
-// this function sets label of the SIM provided to the given value
+// this function just retreives a list of every sim
 exports.getAllSims = function() {
     // Set up the request options
     const options = {
@@ -192,7 +167,7 @@ const sendApiRequest = function (options, body) {
         // Declare error handling callback
         req.on('error', (e) => {
             console.error(`Problem with request: ${e.message}`);
-            resolve(new Error(`Problem with request: ${e.message}`));
+            reject(new Error(`Problem with request: ${e.message}`));
         });
         // Send request data
         req.write(body);
