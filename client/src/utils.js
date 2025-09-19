@@ -20,7 +20,11 @@ export function csvStringToArray (strData) {
 // the label will be set to (value) for each ICCID.
 export function organiseRequestDataIntoJson (parsedCsv) {
     // our object we'll return
-    let organisedRequestData = {}
+    let organisedRequestData = {
+        options: {
+            removeExistingTags: false
+        }
+    }
 
     // loop over labels and insantiate label object for each
     for (let i=0; i < parsedCsv[0].length; i++) {

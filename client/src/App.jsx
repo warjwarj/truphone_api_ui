@@ -13,10 +13,10 @@ import {
 export default function App() {
 
   // track the uploaded file
-  const [fileContent, setFileContent] = useState([]);
+  const [fileContent, setFileContent] = useState(null);
 
-  // track the truiphone API response
-  const [apiResponse, setApiResponse] = useState([])
+  // track the truphone API response
+  const [apiResponse, setApiResponse] = useState(null)
 
   // handle the file upload
   const handleFileChange = (e) => {
@@ -36,36 +36,39 @@ export default function App() {
     if (fileContent === "") {
       window.alert("you need to upload a csv before attempting to send an API request")
     }
-    // parse and organise data into the format the API takes
+    // parse and organise data. Config options.
     let organisedData = organiseRequestDataIntoJson(fileContent)
+    console.log(organisedData)
+    organisedData["options"]["removeExistingTags"] = document.getElementById("removeExistingTagsCheckbox").checked
+
+    // send to api
     axios.post('http://localhost:3001/proxy', organisedData, {Authorization: ""})
       .then((response) => {
-        console.log(response.data)
-        setApiResponse(response.data)
+        if (response.status < 400){
+          setApiResponse(response.data)
+        } else {
+          window.alert(response.data)
+        }
       })
   }
 
   return (
     <div className="App">
       <h1>Upload a CSV File</h1>
-      <input type="file" name="csvFile" accept=".csv" onChange={handleFileChange} required />
+      <input type="file" name="csvFile" accept=".csv" onChange={handleFileChange} required /><br/><br/>
+      <input type="checkbox" id="removeExistingTagsCheckbox" name="removeExistingTags"/><span>Remove existing tags?</span><br/><br/>
       <button onClick={handleApiRequest}>Send Api Request</button>
       <h2>Notes:</h2>
       <ul>
-<<<<<<< HEAD
-        <li>Make sure that your csv column headings conform to the below:</li>
-        <strong>Label,ICCID,Rate,End User,Device Id,Tags,Job Num</strong><aside>seperate multiple tags with a comma.</aside>
-        <li>If the API rejects your request and you're not sure why, it's likely due to incorrect ICCIDs in the CSV. Remember this is set up for the tracker Truphone API</li>
-=======
         <li>Example CSV Column Headings: <strong>Label,ICCID,Rate,End User,Device Id,Tags,Job Num</strong> - seperate multiple tags with a comma.</li>
-        <li>The label field and the tag field are handled differently, but the other attributes are flexible - as long as the attribute is on Truphone, just add a column for it and it will attempt to set it.</li>
+        <li>Each row in the table represents one SIM card, identified by it's ICCID. This program will attempt to set the given attribute value for each SIM, where the column header is the name of the attribute. For example, if I logged into the Truphone website and added an attribute to all DVR SIMs called "Vehicle Reg", I could upload a CSV file with the columns "ICCID", and "Vehicle Reg", and then for each ICCID specify the "Vehicle Reg" value that I want to set - "MT09XOZ" for example. As long as the attribute is on Truphone, just add a column for it and it will attempt to set it. The label field and the tag field are hardcoded, and are handled differently behind the scenes. This should make no difference in practice but may be useful to know.</li>
+        <li>This API can be used for both the tracker and DVR SIM APIs. You will need to change the attributes you attempt to set for each SIM. In practice this means changing the column headers in the CSV file that you upload to the website. You will also need to change the API key the server uses to connect to Truphone.</li>
         <li>If you get an error like "This field must not be blank" check that every row has an ICCID value.</li>
->>>>>>> back_to_plain_js
       </ul>
       <h2>Api Response</h2>
-      <ApiResDisplay apiRes={apiResponse}/>
+      {apiResponse? <ApiResDisplay apiRes={apiResponse}/> : <div>API Response will be displayed here.</div>}
       <h2>CSV File Input:</h2>
-      <CsvDisplay tableData={fileContent}/>
+      {fileContent ? <CsvDisplay tableData={fileContent}/> : <div>Uploaded file will be displayed here.</div>}
     </div>
   );
 }

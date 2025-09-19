@@ -2,7 +2,9 @@ const https = require('https')
 
 // this function adds/removes the given tags for all SIMs in the array parameter.
 exports.makeApiCallToUnassignTags = async function(tags) {
-    everyTag = JSON.parse(await getAllTagsInUse()).map(item => item.label)                // every tag on truphone
+    const allTagsInUse = await getAllTagsInUse()
+    console.log(allTagsInUse)
+    everyTag = JSON.parse(allTagsInUse).map(item => item.label)                // every tag on truphone
     iccids = [...new Set(Object.values(tags).flat())].filter(s => s !== "");              // every unique ICCID
     return everyTag.map((tag) => {
         tag = tag.trim().replace(/\s/g, "%20");
@@ -110,21 +112,6 @@ exports.makeApiCallToSetAttributes = function(attributes, attributes_to_ignore) 
     });
 }
 
-// this function sets label of the SIM provided to the given value
-getAllTagsInUse = function() {
-    // Set up the request options
-    const options = {
-        hostname: 'iot.truphone.com',
-        post: 443,
-        path: `/api/v2.0/tags`,
-        method: 'GET',
-        headers: {
-            'Authorization': process.env.AUTH_TOKEN,
-            'Content-Type': 'application/json',
-        }
-    };
-    return sendApiRequest(options, "")
-}
 
 // this function just retreives a list of every sim
 exports.getAllSims = function() {
@@ -174,3 +161,19 @@ const sendApiRequest = function (options, body) {
         req.end();
     });
 };
+
+// this function sets label of the SIM provided to the given value
+const getAllTagsInUse = function() {
+    // Set up the request options
+    const options = {
+        hostname: 'iot.truphone.com',
+        post: 443,
+        path: `/api/v2.0/tags`,
+        method: 'GET',
+        headers: {
+            'Authorization': process.env.AUTH_TOKEN,
+            'Content-Type': 'application/json',
+        }
+    };
+    return sendApiRequest(options, "")
+}
