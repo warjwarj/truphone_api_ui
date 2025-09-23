@@ -1,0 +1,24 @@
+services:
+  client:
+    container_name: client
+    build:
+      context: ./client
+      dockerfile: client.Dockerfile
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./client:/usr/src/app
+      - /usr/src/app/node_modules
+  server:
+    container_name: server 
+    build:
+      context: ./server
+      dockerfile: server.Dockerfile
+    ports:
+      - "3001:3001"
+      - "443:443"
+    volumes:
+      - ./server:/usr/src/app
+      - /usr/src/app/node_modules
+    environment:
+      TRUPHONE_API_KEY: ${TRUPHONE_API_KEY}

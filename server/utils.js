@@ -3,7 +3,6 @@ const https = require('https')
 // this function adds/removes the given tags for all SIMs in the array parameter.
 exports.makeApiCallToUnassignTags = async function(tags) {
     const allTagsInUse = await getAllTagsInUse()
-    console.log(allTagsInUse)
     everyTag = JSON.parse(allTagsInUse).map(item => item.label)                // every tag on truphone
     iccids = [...new Set(Object.values(tags).flat())].filter(s => s !== "");              // every unique ICCID
     return everyTag.map((tag) => {
@@ -15,7 +14,7 @@ exports.makeApiCallToUnassignTags = async function(tags) {
             path: `/api/v2.0/tags/${tag}/sims`,
             method: "DELETE",
             headers: {
-                'Authorization': process.env.AUTH_TOKEN,
+                'Authorization': "Token " + process.env.TRUPHONE_API_KEY,
                 'Content-Type': 'application/json',
                 'Content-Length': Buffer.byteLength(body)
             }
@@ -39,7 +38,7 @@ exports.makeApiCallsToAssignTags = function (tags) {
                     path: `/api/v2.0/tags/${tag}/sims`,
                     method: "POST",
                     headers: {
-                        'Authorization': process.env.AUTH_TOKEN,
+                        'Authorization': "Token " + process.env.TRUPHONE_API_KEY,
                         'Content-Type': 'application/json',
                         'Content-Length': Buffer.byteLength(body)
                     }
@@ -60,11 +59,11 @@ exports.makeApiCallsToSetLabels = function (labels) {
                 if (!iccid) return null; // skip undefined/null ICCIDs
                 const options = {
                     hostname: 'iot.truphone.com',
-                    port: 443, // fixed typo from 'post' to 'port'
+                    port: 443,
                     path: `/api/v2.2/sims/${iccid}`,
                     method: 'PATCH',
                     headers: {
-                        'Authorization': process.env.AUTH_TOKEN,
+                        'Authorization': "Token " + process.env.TRUPHONE_API_KEY,
                         'Content-Type': 'application/json',
                         'Content-Length': Buffer.byteLength(body)
                     }
@@ -98,11 +97,11 @@ exports.makeApiCallToSetAttributes = function(attributes, attributes_to_ignore) 
                 })
                 const options = {
                     hostname: 'iot.truphone.com',
-                    post: 443,
+                    port: 443,
                     path: `/api/v2.0/attributes/${att}/`,
                     method: 'PATCH',
                     headers: {
-                        'Authorization': process.env.AUTH_TOKEN,
+                        'Authorization': "Token " + process.env.TRUPHONE_API_KEY,
                         'Content-Type': 'application/json',
                         'Content-Length': Buffer.byteLength(body)
                     }
@@ -118,11 +117,11 @@ exports.getAllSims = function() {
     // Set up the request options
     const options = {
         hostname: 'iot.truphone.com',
-        post: 443,
+        port: 443,
         path: `/api/v2.2/sims`,
         method: 'GET',
         headers: {
-            'Authorization': process.env.AUTH_TOKEN,
+            'Authorization': "Token " + process.env.TRUPHONE_API_KEY,
         }
     };
     return sendApiRequest(options, "")
@@ -138,6 +137,7 @@ const agent = new https.Agent({
 });
 
 const sendApiRequest = function (options, body) {
+    console.log(options)
     return new Promise((resolve, reject) => {
         options.agent = agent
         // Make the HTTP request
@@ -148,6 +148,7 @@ const sendApiRequest = function (options, body) {
                 data += chunk;
             });
             res.on('end', () => {
+                console.log(data)
                 resolve(data); // Successfully completed request
             });
         });
@@ -167,11 +168,11 @@ const getAllTagsInUse = function() {
     // Set up the request options
     const options = {
         hostname: 'iot.truphone.com',
-        post: 443,
+        port: 443,
         path: `/api/v2.0/tags`,
         method: 'GET',
         headers: {
-            'Authorization': process.env.AUTH_TOKEN,
+            'Authorization': "Token " + process.env.TRUPHONE_API_KEY,
             'Content-Type': 'application/json',
         }
     };
