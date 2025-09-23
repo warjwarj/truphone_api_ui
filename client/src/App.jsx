@@ -60,7 +60,7 @@ export default function App() {
       <button onClick={handleApiRequest}>Send Api Request</button>
       <h2>Notes:</h2>
       <ul>
-        <li>Example CSV Column Headings: <strong>Label,ICCID,Rate,End User,Device Id,Tags,Job Num</strong> - seperate multiple tags with a comma.</li>
+        <li>Example CSV Column Headings: <strong>Label,ICCID,Rate,End User,Device Id,Tags,Job Num</strong> - seperate multiple tag values with a comma.</li>
         <li>Each row in the table represents one SIM card, identified by it's ICCID. This program will attempt to set the given attribute value for each SIM, where the column header is the name of the attribute. For example, if I logged into the Truphone website and added an attribute to all DVR SIMs called "Vehicle Reg", I could upload a CSV file with the columns "ICCID", and "Vehicle Reg", and then for each ICCID specify the "Vehicle Reg" value that I want to set - "MT09XOZ" for example. As long as the attribute is on Truphone, just add a column for it and it will attempt to set it. The label field and the tag field are hardcoded, and are handled differently behind the scenes. This should make no difference in practice but may be useful to know.</li>
         <li>This API can be used for both the tracker and DVR SIM APIs. You will need to change the attributes you attempt to set for each SIM. In practice this means changing the column headers in the CSV file that you upload to the website. You will also need to change the API key the server uses to connect to Truphone.</li>
         <li>If you get an error like "This field must not be blank" check that every row has an ICCID value.</li>
