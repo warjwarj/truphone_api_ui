@@ -32,7 +32,7 @@ In the powershell window, still in the project root directory, run the command b
 
 ```docker-compose up --build -d```
 
-Now you should see the containers running in docker desktop. In your browser navigate to http://localhost:3000 and you should see the web interface.
+Now you should see the containers running in docker desktop. In your browser navigate to http://localhost:3000 and you should see the web interface. The web interface should also be available on the LAN. Just navigate to the host machines ip address, with the port specified at the end like so: http://192.168.1.123:3000 and you should see the webpage.
 
 ### Without Docker
 Install Node.js:  https://nodejs.org/en
@@ -45,4 +45,4 @@ In each subfolder in the main project directory, "client" and "server", run this
 
 ```npm start```
 
-Once both the client and server are running, open a browser window and navigate to http://localhost:3000. You should see the web interface.
+Once both the client and server are running, open a browser window and navigate to http://localhost:3000. You should see the web interface. The web interface should also be available on the LAN. Just navigate to the host machines ip address, with the port specified at the end like so: http://192.168.1.123:3000 and you should see the webpage.
